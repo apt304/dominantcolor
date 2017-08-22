@@ -64,7 +64,7 @@ const (
 )
 
 // Find returns the dominant color in img.
-func Find(img image.Image) color.RGBA {
+func Find(img image.Image) []color.RGBA {
 	// Shrink image for faster processing.
 	img = resize.Thumbnail(resizeTo, resizeTo, img, resize.NearestNeighbor)
 
@@ -131,7 +131,7 @@ func Find(img image.Image) color.RGBA {
 	sort.Sort(byWeight(clusters))
 	// Loop through the clusters to figure out which cluster has an appropriate
 	// color. Skip any that are too bright/dark and go in order of weight.
-	var col color.RGBA
+	var colors []color.RGBA
 	for i, c := range clusters {
 		r, g, b := c.Centroid()
 		// Sum the RGB components to determine if the color is too bright or too dark.
@@ -140,21 +140,24 @@ func Find(img image.Image) color.RGBA {
 		if summedColor < maxBrightness && summedColor > minDarkness {
 			// If we found a valid color just set it and break. We don't want to
 			// check the other ones.
-			col.R = r
-			col.G = g
-			col.B = b
-			col.A = 0xFF
-			break
+			colors = append(colors, color.RGBA{
+				R: r
+				G: g
+				B: b
+				A: 0xFF
+			})
 		} else if i == 0 {
 			// We haven't found a valid color, but we are at the first color so
 			// set the color anyway to make sure we at least have a value here.
-			col.R = r
-			col.G = g
-			col.B = b
-			col.A = 0xFF
+			colors = append(colors, color.RGBA{
+				R: r
+				G: g
+				B: b
+				A: 0xFF
+			})
 		}
 	}
-	return col
+	return colors
 }
 
 // Hex returns a string representing the color in "#AABBCC" format.
