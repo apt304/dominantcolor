@@ -141,19 +141,19 @@ func Find(img image.Image) []color.RGBA {
 			// If we found a valid color just set it and break. We don't want to
 			// check the other ones.
 			colors = append(colors, color.RGBA{
-				R: r
-				G: g
-				B: b
-				A: 0xFF
+				R: r,
+				G: g,
+				B: b,
+				A: 0xFF,
 			})
 		} else if i == 0 {
 			// We haven't found a valid color, but we are at the first color so
 			// set the color anyway to make sure we at least have a value here.
 			colors = append(colors, color.RGBA{
-				R: r
-				G: g
-				B: b
-				A: 0xFF
+				R: r,
+				G: g,
+				B: b,
+				A: 0xFF,
 			})
 		}
 	}
